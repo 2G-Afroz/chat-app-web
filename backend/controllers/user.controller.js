@@ -42,7 +42,6 @@ const registerUser = async (req, res) => {
 
     res.status(201).json({ _id: user._id, name, email, token });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: `Server Error: ${error}` });
   }
 };
@@ -61,9 +60,24 @@ const loginUser = async (req, res) => {
 
 	}
 	catch(error) {
-		console.error(error);
 		res.status(500).json({ message: `Server Error: ${error}` });
 	}
 };
 
-export { registerUser, loginUser };
+const getUserProfile = async (req, res) => {
+	const userId = req.params.userId;
+
+	try {
+		const user = await User.findById(userId).select('-password');
+
+		if(!user) return res.status(404).json({ message: 'User not found' });
+
+		res.status(200).json(user);
+
+	}
+	catch(error) {
+		res.status(500).json({ message: `Server Error: ${error}` });
+	}
+};
+
+export { registerUser, loginUser, getUserProfile };

@@ -21,3 +21,7 @@ Content-Type: application/json
 ###
 // Get User Profile
 GET http://localhost:3000/api/user/find/66cf2e30a2c3a8269e37ee26
+
+###
+// Get All Users
+GET http://localhost:3000/api/user/find

@@ -1,8 +1,19 @@
+// Register User
 POST http://localhost:3000/api/user/register
 Content-Type: application/json
 
 {
-		"name": "Md Afroz Alam",
-		"email": "a@gmail.com",
-		"password": "Afroz@123"
+		"name": "Faij Alam",
+		"email": "faijalam@gmailcom",
+		"password": "Faij@123"
+}
+
+###
+// Login User
+POST http://localhost:3000/api/user/login
+Content-Type: application/json
+
+{
+		"email": "faijalam@gmail.com",
+		"password": "Faij@123"
 }

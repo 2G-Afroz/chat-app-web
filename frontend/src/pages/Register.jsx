@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, Grid2, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Container, Grid, Grid2, TextField, Typography } from '@mui/material'
 import React from 'react'
 
 export default function Register() {
@@ -57,6 +57,9 @@ export default function Register() {
 						Register
 					</Button>
 				</Box>
+				<Alert severity="error" sx={{ mt: 2}}>
+					An error occurred
+				</Alert>
 			</Box>
 		</Container>
 	)

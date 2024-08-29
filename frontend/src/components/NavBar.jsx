@@ -25,9 +25,11 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div">
-            Chat App
-          </Typography>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <Typography variant="h6" component="div">
+              Chat App
+            </Typography>
+          </Link>
           <Typography variant="body2" component="div" align="center" sx={{ flexGrow: 1, color: "yellow" }}>
             { user ? `Logged in as ${user.name}` : "" }
           </Typography>

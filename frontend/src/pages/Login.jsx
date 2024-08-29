@@ -12,7 +12,7 @@ export default function Login() {
 					mt: 8,
 				}}
 			>
-				<Typography variant="h4" component="h1">
+				<Typography variant="h5" component="h1">
 					Login
 				</Typography>
 				<Box sx={{ mt: 2 }} component="form">

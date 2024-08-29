@@ -43,3 +43,18 @@ GET http://localhost:3000/api/chats/66d096d145ff2e4a1c375970
 ###
 // Find Single Chat
 GET http://localhost:3000/api/chats/find/66d096d145ff2e4a1c375970/66d0c8063ebb2b529b30e7d0
+
+###
+// Send Message
+POST http://localhost:3000/api/messages
+Content-Type: application/json
+
+{
+		"chatId": "66d0c8063ebb2b529b30e7d0",
+		"senderId": "66d096d145ff2e4a1c375970",
+		"text": "Hello"
+}
+
+###
+// Get All Messages
+GET http://localhost:3000/api/messages/66d0c8063ebb2b529b30e7d0

@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 // importing the user route
 import userRoute from './routes/user.route.js';
 import chatRoute from './routes/chat.route.js';
+import messageRoute from './routes/message.route.js';
 
 // Initialize express app
 const app = express();
@@ -25,6 +26,7 @@ app.use(cors());
 // Routes
 app.use('/api/user', userRoute);
 app.use('/api/chats', chatRoute);
+app.use('/api/messages', messageRoute);
 app.get('/', (req, res) => {
 	res.send('Welcome to the backend!');
 });

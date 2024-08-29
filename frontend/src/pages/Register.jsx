@@ -9,10 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { registerStart, registerSuccess, registerFail } from "../redux/user/userSlice";
 
 export default function Register() {
   const [formData, setFormData] = React.useState({});
 	const [err, setErr] = React.useState();
+	const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -25,6 +28,7 @@ export default function Register() {
     e.preventDefault();
 		setErr(null);
     try {
+			dispatch(registerStart());
       const res = await fetch("/api/user/register", {
         method: "POST",
         headers: {
@@ -35,15 +39,17 @@ export default function Register() {
 
 			if(res.ok) {
 				const resData = await res.json();
-				console.log(resData);
+				dispatch(registerSuccess(resData));
 				setErr(null);
 			} else {
 				const resData = await res.json();
+				dispatch(registerFail());
 				setErr(resData.message);
 				return;
 			}
 
     } catch (error) {
+			dispatch(registerFail());
 			setErr(error);
     }
   };

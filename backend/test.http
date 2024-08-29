@@ -25,3 +25,21 @@ GET http://localhost:3000/api/user/find/66cf2e30a2c3a8269e37ee26
 ###
 // Get All Users
 GET http://localhost:3000/api/user/find
+
+###
+// Create Chat
+POST http://localhost:3000/api/chats
+Content-Type: application/json
+
+{
+		"firstId": "66d096d145ff2e4a1c375970",
+		"secondId": "66d0c8063ebb2b529b30e7d0"
+}
+
+###
+// Find All Chat
+GET http://localhost:3000/api/chats/66d096d145ff2e4a1c375970
+
+###
+// Find Single Chat
+GET http://localhost:3000/api/chats/find/66d096d145ff2e4a1c375970/66d0c8063ebb2b529b30e7d0

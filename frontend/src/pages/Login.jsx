@@ -1,8 +1,8 @@
 import { Alert, Box, Button, Container, Grid, Grid2, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { Navigate } from 'react-router-dom'
 import { registerStart, registerSuccess, registerFail } from "../redux/user/userSlice";
 
 export default function Login() {
@@ -48,7 +48,7 @@ export default function Login() {
 	};
 
 	if(user) {
-		return <Navigate to="/" />;
+		return <Navigate to="/" />
 	}
 
 	return (

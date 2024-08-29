@@ -11,11 +11,18 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { registerStart, registerSuccess, registerFail } from "../redux/user/userSlice";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 export default function Register() {
   const [formData, setFormData] = React.useState({});
 	const [err, setErr] = React.useState();
 	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user.currentUser);
+
+	if(user) {
+		return <Navigate to="/" />;
+	}
 
   const handleChange = (e) => {
     setFormData({

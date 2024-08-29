@@ -10,8 +10,6 @@ import { useSelector } from "react-redux";
 export default function NavBar() {
   const user = useSelector((state) => state.user.currentUser);
 
-  console.log(user);
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -22,12 +20,20 @@ export default function NavBar() {
           <Typography variant="body2" component="div" align="center" sx={{ flexGrow: 1, color: "yellow" }}>
             { user ? `Logged in as ${user.name}` : "" }
           </Typography>
-          <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
-            <Button color="inherit">Login</Button>
-          </Link>
-          <Link to="/register" style={{ textDecoration: "none", color: "white" }}>
-            <Button color="inherit">Register</Button>
-          </Link>
+          { user ? (
+            <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
+              <Button color="inherit">Logout</Button>
+            </Link>
+          ) : (
+            <>
+              <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
+                <Button color="inherit">Login</Button>
+              </Link>
+              <Link to="/register" style={{ textDecoration: "none", color: "white" }}>
+                <Button color="inherit">Register</Button>
+              </Link>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

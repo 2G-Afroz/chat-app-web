@@ -1,7 +1,15 @@
 import { Alert, Box, Button, Container, Grid, Grid2, TextField, Typography } from '@mui/material'
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { Navigate } from 'react-router-dom'
 
 export default function Login() {
+	const user = useSelector((state) => state.user.currentUser);
+
+	if(user) {
+		return <Navigate to="/" />;
+	}
+
 	return (
 		<Container maxWidth="sm">
 			<Box

@@ -24,6 +24,7 @@ import {
   Grid2,
 } from "@mui/material";
 import PotentialChat from "../components/PotentialChat";
+import ChatBox from "../components/ChatBox";
 
 export default function Chat() {
   const chats = useSelector((state) => state.chat.chats);
@@ -110,6 +111,7 @@ export default function Chat() {
 	}, [currentChat]);
 
 	const handleChatClick = (chat) => {
+		console.log(chat);
 		dispatch(setCurrentChat(chat));
 	}
 
@@ -140,31 +142,14 @@ export default function Chat() {
       <Box
         sx={{
           flexGrow: 1,
-          padding: 2,
+          paddingLeft: 1,
           display: "flex",
           flexDirection: "column",
         }}>
-        <Typography variant="h6" gutterBottom>
-          Chat
-        </Typography>
-        <Box
-          sx={{
-            flexGrow: 1,
-            overflowY: "auto",
-            padding: 2,
-            border: "1px solid #ddd",
-            borderRadius: 1,
-          }}>
-          {/* Chat messages */}
-          <Typography variant="body1" gutterBottom>
-            User 1: Hello!
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            You: Hi there!
-          </Typography>
-        </Box>
+				{/* Chat Box */}
+				<ChatBox messages={messages}/>
         {/* Chat Input */}
-        <Box sx={{ display: "flex", marginTop: 2 }}>
+        <Box sx={{ display: "flex", marginTop: 1 }}>
           <TextField
             fullWidth
             variant="outlined"

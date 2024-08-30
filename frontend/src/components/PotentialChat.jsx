@@ -44,7 +44,8 @@ export default function PotentialChat({ user }) {
     <Button
       variant="outlined"
       style={{ borderRadius: 16 }}
-      onClick={handleCreateChat}>
+      onClick={handleCreateChat}
+    >
       {user.name}
     </Button>
   );

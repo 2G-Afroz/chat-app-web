@@ -165,9 +165,9 @@ export default function Chat() {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                cursor: "pointer",
+								cursor: "pointer",
               }}>
-              <UserChat chat={chat} />
+              <UserChat chat={chat}/>
             </Box>
           ))}
         </List>

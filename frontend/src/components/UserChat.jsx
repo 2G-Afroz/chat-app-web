@@ -1,37 +1,47 @@
 import { Avatar, Box, Grid2, ListItem, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import { blue, grey } from "@mui/material/colors";
 import { useSelector } from "react-redux";
 
-export default function UserChat({chat}) {
-	const currentUser = useSelector((state) => state.user.currentUser);
-	const [ otherUser, setOtherUser ] = React.useState("KING");
+export default function UserChat({ chat }) {
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentChat = useSelector((state) => state.chat.currentChat);
+  const [otherUser, setOtherUser] = React.useState("KING");
 
-	// Get the other user in the chat
-	const otherUserId = chat.members.find((memberId) => memberId !== currentUser._id);
-	React.useEffect(() => {
-		getUser(otherUserId).then((data) => {
-			setOtherUser(data);
-		});
-	}, []);
+  // Get the other user in the chat
+  const otherUserId = chat.members.find(
+    (memberId) => memberId !== currentUser._id
+  );
+  React.useEffect(() => {
+    getUser(otherUserId).then((data) => {
+      setOtherUser(data);
+    });
+  }, []);
 
-	// Get the other user's details
-	const getUser = async (id) => {
-		try {
-			const res = await fetch('/api/user/find/' + id);
+  // Get the other user's details
+  const getUser = async (id) => {
+    try {
+      const res = await fetch("/api/user/find/" + id);
 
-			if (res.ok) {
-				const data = await res.json();
-				return data;
-			}
-		} catch (err) {
-			console.error(err);
-		}
-	};
+      if (res.ok) {
+        const data = await res.json();
+        return data;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <ListItem
-      sx={{ mb: "2px", p: "8px", borderRadius: 1, border: 1, borderColor: `${grey[300]}` }}>
+      sx={{
+        mb: "2px",
+        p: "8px",
+        borderRadius: 1,
+        border: 1,
+        borderColor: `${grey[300]}`,
+        backgroundColor: currentChat?._id === chat._id ? blue[100] : "white",
+      }}>
       {/* Avatar and the online status */}
       <Box sx={{ position: "relative", marginRight: 2 }}>
         <Avatar />
@@ -52,7 +62,7 @@ export default function UserChat({chat}) {
       {/* User name and the recent message */}
       <Grid2 container direction="column" sx={{ flexGrow: 1 }}>
         <Typography variant="body1" component="div">
-					{otherUser.name}
+          {otherUser.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Recent Message

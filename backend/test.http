@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
 		"name": "Faij Alam",
-		"email": "faijalam@gmailcom",
+		"email": "faijalam@gmail.com",
 		"password": "Faij@123"
 }
 
@@ -14,8 +14,8 @@ POST http://localhost:3000/api/user/login
 Content-Type: application/json
 
 {
-		"email": "faijalam@gmail.com",
-		"password": "Faij@123"
+		"email": "nimmi@gmail.com",
+		"password": "Nimmi@123"
 }
 
 ###
@@ -38,7 +38,7 @@ Content-Type: application/json
 
 ###
 // Find All Chat
-GET http://localhost:3000/api/chats/66d096d145ff2e4a1c375970
+GET http://localhost:3000/api/chats/66d19bd9ff74252f1ad6489e
 
 ###
 // Find Single Chat
@@ -50,11 +50,11 @@ POST http://localhost:3000/api/messages
 Content-Type: application/json
 
 {
-		"chatId": "66d0c8063ebb2b529b30e7d0",
+		"chatId": "66d1d692ff74252f1ad64b7f",
 		"senderId": "66d096d145ff2e4a1c375970",
-		"text": "Hello"
+		"text": "Chat 1 A to R."
 }
 
 ###
 // Get All Messages
-GET http://localhost:3000/api/messages/66d0c8063ebb2b529b30e7d0
+GET http://localhost:3000/api/messages/66d1d4d7ff74252f1ad64b5a

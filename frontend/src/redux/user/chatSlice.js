@@ -1,7 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 
 const initialState = {
 	chats: null,
+	currentChat: null,
 	loading: false,
 	error: null,
 };
@@ -22,9 +23,12 @@ const chatSlice = createSlice({
 			state.error = action.payload;
 			state.loading = false;
 		},
+		setCurrentChat: (state, action) => {
+			state.currentChat = action.payload;
+		},
 	},
 });
 
-export const { getChatsStart, getChatsSuccess, getChatsFail } = chatSlice.actions;
+export const { getChatsStart, getChatsSuccess, getChatsFail, setCurrentChat } = chatSlice.actions;
 
 export default chatSlice.reducer;

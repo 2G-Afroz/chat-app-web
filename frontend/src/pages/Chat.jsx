@@ -3,13 +3,13 @@ import {
   getChatsStart,
   getChatsSuccess,
   getChatsFail,
-	setCurrentChat,
+  setCurrentChat,
 } from "../redux/user/chatSlice";
 import {
-	getMessagesStart,
-	getMessagesSuccess,
-	getMessagesFail,
-}	from "../redux/user/messageSlice";
+  getMessagesStart,
+  getMessagesSuccess,
+  getMessagesFail,
+} from "../redux/user/messageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import UserChat from "../components/UserChat";
 import {
@@ -29,10 +29,11 @@ import ChatBox from "../components/ChatBox";
 export default function Chat() {
   const chats = useSelector((state) => state.chat.chats);
   const currentUser = useSelector((state) => state.user.currentUser);
-	const currentChat = useSelector((state) => state.chat.currentChat);
-	const messages = useSelector((state) => state.message.messages);
+  const currentChat = useSelector((state) => state.chat.currentChat);
+  const messages = useSelector((state) => state.message.messages);
   const [potentialUsers, setPotentialUsers] = useState([]);
   const dispatch = useDispatch();
+  const [message, setMessage] = useState(""); // This is the message that user types in the chat input
 
   // To get All Chats
   useEffect(() => {
@@ -55,7 +56,7 @@ export default function Chat() {
     getChats();
   }, []);
 
-	// To get Potential Users
+  // To get Potential Users
   useEffect(() => {
     const getPotentialUsers = async () => {
       try {
@@ -88,32 +89,62 @@ export default function Chat() {
     getPotentialUsers();
   }, [chats]);
 
-	// To load Chat
-	useEffect(() => {
-		const loadChat = async () => {
-			if(currentChat) {
-				try {
-					dispatch(getMessagesStart());
-					const res = await fetch('/api/messages/' + currentChat._id);
-					if (res.ok) {
-						const data = await res.json();
-						dispatch(getMessagesSuccess(data.messages));
-					} else {
-						dispatch(getMessagesFail());
-					}
-				} catch (err) {
-					dispatch(getMessagesFail());
-					console.error(err);
-				}
-			}
-		};
-		loadChat();
-	}, [currentChat]);
+  // To load Chat
+  useEffect(() => {
+    const loadChat = async () => {
+      if (currentChat) {
+        try {
+          dispatch(getMessagesStart());
+          const res = await fetch("/api/messages/" + currentChat._id);
+          if (res.ok) {
+            const data = await res.json();
+            dispatch(getMessagesSuccess(data.messages));
+          } else {
+            dispatch(getMessagesFail());
+          }
+        } catch (err) {
+          dispatch(getMessagesFail());
+          console.error(err);
+        }
+      }
+    };
+    loadChat();
+  }, [currentChat]);
 
-	const handleChatClick = (chat) => {
-		console.log(chat);
-		dispatch(setCurrentChat(chat));
-	}
+  const handleChatClick = (chat) => {
+    dispatch(setCurrentChat(chat));
+  };
+
+  const handleMessageSend = async (e) => {
+    e.preventDefault();
+    // Send message to the server
+		if(!message) {
+			return;
+		}
+    try {
+      const res = await fetch("/api/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatId: currentChat._id,
+          senderId: currentUser._id,
+          text: message,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        dispatch(getMessagesSuccess(messages.concat(data.response)));
+				setMessage("");
+      } else {
+				console.log("Failed to send message");
+			}
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Box sx={{ display: "flex", height: "89.5vh", mt: 1 }}>
@@ -129,9 +160,13 @@ export default function Chat() {
         <List sx={{ width: "100%", gap: 1 }}>
           {chats?.map((chat) => (
             <Box
-							onClick={() => handleChatClick(chat)}
+              onClick={() => handleChatClick(chat)}
               key={chat._id}
-              sx={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}>
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                cursor: "pointer",
+              }}>
               <UserChat chat={chat} />
             </Box>
           ))}
@@ -146,17 +181,24 @@ export default function Chat() {
           display: "flex",
           flexDirection: "column",
         }}>
-				{/* Chat Box */}
-				<ChatBox messages={messages}/>
+        {/* Chat Box */}
+        <ChatBox messages={messages} />
         {/* Chat Input */}
-        <Box sx={{ display: "flex", marginTop: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleMessageSend}
+          sx={{ display: "flex", marginTop: 1 }}>
           <TextField
             fullWidth
             variant="outlined"
             placeholder="Type your message..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
             sx={{ marginRight: 1 }}
           />
-          <Button variant="contained">Send</Button>
+          <Button variant="contained" type="submit">
+            Send
+          </Button>
         </Box>
       </Box>
     </Box>

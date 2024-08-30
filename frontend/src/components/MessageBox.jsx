@@ -3,6 +3,8 @@ import { Box, Typography } from "@mui/material";
 
 export default function MessageBox({ message, timestamp, sender }) {
   
+	const time = new Date(timestamp);
+
   return (
     <Box
       sx={{
@@ -12,17 +14,17 @@ export default function MessageBox({ message, timestamp, sender }) {
       }}>
       <Box
         sx={{
-          padding: "4px", // Add some padding
-          border: "1px solid #ccc", // Optional: Add a border
-          borderRadius: 1, // Optional: Add rounded corners
-          overflowWrap: "break-word", // Ensures the text wraps within the box
-          backgroundColor: "#f5f5f5", // Optional: Add background color
-          maxWidth: "100%", // Allow the box to resize based on text
-          display: "inline-block", // Ensure the box fits the content
+          padding: "4px",
+          border: "1px solid #ccc",
+          borderRadius: 1,
+          overflowWrap: "break-word",
+          backgroundColor: "#f5f5f5",
+          maxWidth: "100%",
+          display: "inline-block",
         }}>
         <Typography variant="body1">{message}</Typography>
         <Typography variant="caption" sx={{ color: "#666" }}>
-          {timestamp}
+          {time.toLocaleString()}
         </Typography>
       </Box>
     </Box>

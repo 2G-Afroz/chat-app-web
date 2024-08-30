@@ -16,11 +16,13 @@ import {
 } from "@mui/material";
 
 export default function Chat() {
-  const { chats, loading, error } = useSelector((state) => state.chat);
+  const { chats } = useSelector((state) => state.chat);
   const currentUser = useSelector((state) => state.user.currentUser);
   const dispatch = useDispatch();
 
-  useEffect(() => {}, []);
+	useEffect(() => {
+		getChats();
+	}, []);
 
   // Function to get All Chats
   const getChats = async () => {
@@ -45,8 +47,9 @@ export default function Chat() {
       {/* Left Sidebar - Users List */}
       <Paper sx={{ width: "300px", padding: 2, boxShadow: 3 }}>
 				<List sx={{width: "100%", gap: 1}}>
-					<UserChat />
-					<UserChat />
+					{ chats.map((chat) => (
+						<UserChat key={chat._id} chat={chat} />
+					))}
 				</List>
       </Paper>
 

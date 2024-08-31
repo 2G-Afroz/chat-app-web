@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import PotentialChat from "../components/PotentialChat";
 import ChatBox from "../components/ChatBox";
+import { io } from "socket.io-client";
 
 export default function Chat() {
   const chats = useSelector((state) => state.chat.chats);
@@ -34,6 +35,7 @@ export default function Chat() {
   const [potentialUsers, setPotentialUsers] = useState([]);
   const dispatch = useDispatch();
   const [message, setMessage] = useState(""); // This is the message that user types in the chat input
+  const [socket, setSocket] = useState(null);
 
   // To get All Chats
   useEffect(() => {
@@ -110,6 +112,16 @@ export default function Chat() {
     };
     loadChat();
   }, [currentChat]);
+
+  // Connect to the socket
+  useEffect(() => {
+    const newSocket = io("http://localhost:4000");
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [currentUser]);
 
   const handleChatClick = (chat) => {
     dispatch(setCurrentChat(chat));

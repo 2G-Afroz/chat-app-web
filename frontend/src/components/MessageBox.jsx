@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { blue } from "@mui/material/colors";
 
 export default function MessageBox({ message, timestamp, sender }) {
   
@@ -18,7 +19,7 @@ export default function MessageBox({ message, timestamp, sender }) {
           border: "1px solid #ccc",
           borderRadius: 1,
           overflowWrap: "break-word",
-          backgroundColor: "#f5f5f5",
+          backgroundColor: sender === "me" ? blue[100] : "#fff",
           maxWidth: "100%",
           display: "inline-block",
         }}>

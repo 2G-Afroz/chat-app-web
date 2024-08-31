@@ -36,6 +36,8 @@ export default function Chat() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState(""); // This is the message that user types in the chat input
   const [socket, setSocket] = useState(null);
+  const [ onlineUsers, setOnlineUsers ] = useState([]);
+
 
   // To get All Chats
   useEffect(() => {
@@ -122,6 +124,25 @@ export default function Chat() {
       newSocket.disconnect();
     };
   }, [currentUser]);
+
+  // Add online users
+  useEffect(() => {
+    if(socket === null) return;
+
+    socket.emit("addNewUser", currentUser?._id);
+
+    socket.on('onlineUsers', (users) => {
+      setOnlineUsers(users);
+    });
+
+    return () => {
+      socket.off('onlineUsers');
+    };
+  }, [socket])
+
+  useEffect(() => {
+    console.log(onlineUsers);
+  }, [onlineUsers]);
 
   const handleChatClick = (chat) => {
     dispatch(setCurrentChat(chat));

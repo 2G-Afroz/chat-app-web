@@ -18,7 +18,7 @@ export default function ChatBox({ messages}) {
 				scrollBehavior: "smooth",
 			}}
 		>
-			{messages.map((message) => (
+			{messages?.map((message) => (
 				<MessageBox
 					key={message._id}
 					message={message.text}

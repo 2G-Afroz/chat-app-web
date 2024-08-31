@@ -153,7 +153,7 @@ export default function Chat() {
     return () => {
       socket.off("getMessage");
     }
-  }, [socket]);
+  }, [socket, messages]);
 
   const handleChatClick = (chat) => {
     dispatch(setCurrentChat(chat));

@@ -1,13 +1,21 @@
 import { Box } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import MessageBox from './MessageBox'
 import { useSelector } from 'react-redux'
 
 export default function ChatBox({ messages}) {
 	const currentUser = useSelector((state) => state.user.currentUser);
+	const boxRef = useRef(null);
+
+	useEffect(() => {
+		if(boxRef.current) {
+			boxRef.current.scrollTop = boxRef.current.scrollHeight;
+		}
+	}, [messages]);
 
 	return (
 		<Box
+			ref={boxRef}
 			sx={{
 				flexGrow: 1,
 				overflowY: "auto",
@@ -16,6 +24,9 @@ export default function ChatBox({ messages}) {
 				border: "1px solid #ddd",
 				borderRadius: 1,
 				scrollBehavior: "smooth",
+				'&::-webkit-scrollbar': {
+					display: 'none',
+				},
 			}}
 		>
 			{messages?.map((message) => (

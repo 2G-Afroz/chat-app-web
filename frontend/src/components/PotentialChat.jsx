@@ -8,7 +8,7 @@ import {
   getChatsFail,
 } from "../redux/user/chatSlice";
 
-export default function PotentialChat({ user }) {
+export default function PotentialChat({ user, onlineUsers }) {
   const currentUser = useSelector((state) => state.user.currentUser);
   const { chats } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
@@ -45,6 +45,9 @@ export default function PotentialChat({ user }) {
       variant="outlined"
       style={{ borderRadius: 16 }}
       onClick={handleCreateChat}
+      {...(onlineUsers.some((onlineUser) => onlineUser.userId === user._id) && {
+        sx: { backgroundColor: "green", color: "white" },
+      })}
     >
       {user.name}
     </Button>

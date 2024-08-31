@@ -140,6 +140,7 @@ export default function Chat() {
     };
   }, [socket])
 
+  // Used for debugging purposes
   useEffect(() => {
     console.log(onlineUsers);
   }, [onlineUsers]);
@@ -186,7 +187,7 @@ export default function Chat() {
         {/* Potential Users */}
         <Grid2 container gap={"3px"}>
           {potentialUsers?.map((user) => (
-            <PotentialChat key={user._id} user={user} />
+            <PotentialChat key={user._id} user={user} onlineUsers={onlineUsers}/>
           ))}
         </Grid2>
         {/* Chat Users */}

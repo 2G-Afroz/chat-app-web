@@ -26,6 +26,7 @@ import {
 import PotentialChat from "../components/PotentialChat";
 import ChatBox from "../components/ChatBox";
 import { io } from "socket.io-client";
+import { current } from "@reduxjs/toolkit";
 
 export default function Chat() {
   const chats = useSelector((state) => state.chat.chats);
@@ -36,8 +37,7 @@ export default function Chat() {
   const dispatch = useDispatch();
   const [message, setMessage] = useState(""); // This is the message that user types in the chat input
   const [socket, setSocket] = useState(null);
-  const [ onlineUsers, setOnlineUsers ] = useState([]);
-
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   // To get All Chats
   useEffect(() => {
@@ -127,23 +127,33 @@ export default function Chat() {
 
   // Add online users
   useEffect(() => {
-    if(socket === null) return;
+    if (socket === null) return;
 
     socket.emit("addNewUser", currentUser?._id);
 
-    socket.on('onlineUsers', (users) => {
+    socket.on("onlineUsers", (users) => {
       setOnlineUsers(users);
     });
 
     return () => {
-      socket.off('onlineUsers');
+      socket.off("onlineUsers");
     };
-  }, [socket])
+  }, [socket]);
 
-  // Used for debugging purposes
+  // Get the message from the recipient
   useEffect(() => {
-    console.log(onlineUsers);
-  }, [onlineUsers]);
+    if (socket === null) return;
+
+    socket.on("getMessage", (message) => {
+      if(message.chatId === currentChat?._id) {
+        dispatch(getMessagesSuccess(messages.concat(message)));
+      }
+    });
+
+    return () => {
+      socket.off("getMessage");
+    }
+  }, [socket]);
 
   const handleChatClick = (chat) => {
     dispatch(setCurrentChat(chat));
@@ -152,9 +162,9 @@ export default function Chat() {
   const handleMessageSend = async (e) => {
     e.preventDefault();
     // Send message to the server
-		if(!message) {
-			return;
-		}
+    if (!message) {
+      return;
+    }
     try {
       const res = await fetch("/api/messages", {
         method: "POST",
@@ -171,10 +181,27 @@ export default function Chat() {
       if (res.ok) {
         const data = await res.json();
         dispatch(getMessagesSuccess(messages.concat(data.response)));
-				setMessage("");
+        setMessage("");
+
+        // Get the recipient Id 
+        const recipientId = currentChat.members.find(
+          (memberId) => memberId !== currentUser._id
+        );
+        const recipientSocket = onlineUsers?.find(
+          (user) => user.userId === recipientId
+        );
+
+        // Sending Message to the recipient
+        if (recipientSocket) {
+          socket.emit("sendMessage", {
+            ...data.response,
+            recipientSocketId: recipientSocket.socketId,
+          });
+        }
+
       } else {
-				console.log("Failed to send message");
-			}
+        console.log("Failed to send message");
+      }
     } catch (err) {
       console.error(err);
     }
@@ -187,7 +214,11 @@ export default function Chat() {
         {/* Potential Users */}
         <Grid2 container gap={"3px"}>
           {potentialUsers?.map((user) => (
-            <PotentialChat key={user._id} user={user} onlineUsers={onlineUsers}/>
+            <PotentialChat
+              key={user._id}
+              user={user}
+              onlineUsers={onlineUsers}
+            />
           ))}
         </Grid2>
         {/* Chat Users */}
@@ -199,9 +230,9 @@ export default function Chat() {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-								cursor: "pointer",
+                cursor: "pointer",
               }}>
-              <UserChat chat={chat}/>
+              <UserChat chat={chat} onlineUsers={onlineUsers} />
             </Box>
           ))}
         </List>

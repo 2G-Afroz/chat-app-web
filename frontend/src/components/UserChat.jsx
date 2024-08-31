@@ -3,7 +3,7 @@ import React from "react";
 import { blue, grey } from "@mui/material/colors";
 import { useSelector } from "react-redux";
 
-export default function UserChat({ chat }) {
+export default function UserChat({ chat, onlineUsers }) {
   const currentUser = useSelector((state) => state.user.currentUser);
   const currentChat = useSelector((state) => state.chat.currentChat);
   const [otherUser, setOtherUser] = React.useState("KING");
@@ -45,18 +45,22 @@ export default function UserChat({ chat }) {
       {/* Avatar and the online status */}
       <Box sx={{ position: "relative", marginRight: 2 }}>
         <Avatar />
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: 10,
-            height: 10,
-            borderRadius: "50%",
-            backgroundColor: "green",
-            border: "2px solid white",
-          }}
-        />
+        {onlineUsers.some(
+          (onlineUser) => onlineUser.userId === otherUser._id
+        ) && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: 10,
+              height: 10,
+              borderRadius: "50%",
+              backgroundColor: "green",
+              border: "2px solid white",
+            }}
+          />
+        )}
       </Box>
 
       {/* User name and the recent message */}

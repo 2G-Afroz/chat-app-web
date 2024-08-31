@@ -11,6 +11,11 @@ io.on("connection", (socket) => {
 		io.emit("onlineUsers", onlineUsers);
   });
 
+	socket.on("sendMessage", (message) => {
+		const { recipientSocketId, ...rest } = message;
+		io.to(message.recipientSocketId).emit("getMessage", rest);
+	});
+
 	socket.on("disconnect", () => {
 		onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
 		io.emit("onlineUsers", onlineUsers);

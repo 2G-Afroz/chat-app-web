@@ -33,7 +33,7 @@ export default function PotentialChat({ user, onlineUsers }) {
       }
 
 			const data = await res.json();
-			dispatch(getChatsSuccess(chats.concat(data.response)));
+			dispatch(getChatsSuccess(chats.concat(data)));
     } catch (err) {
 			//getChatsFail();
       console.error(err);

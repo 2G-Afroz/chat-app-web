@@ -14,7 +14,7 @@ const createChat = async (req, res) => {
 		});
 
 		if(chat) {
-			return res.status(200).json({ chat });
+			return res.status(200).json(chat);
 		}
 
 		const newChat = new Chat({
@@ -23,7 +23,7 @@ const createChat = async (req, res) => {
 
 		const response = await newChat.save();
 
-		res.status(201).json({ response });
+		res.status(201).json(response);
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error });

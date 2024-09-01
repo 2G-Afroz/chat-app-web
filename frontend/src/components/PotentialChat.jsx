@@ -9,7 +9,7 @@ import {
 } from "../redux/user/chatSlice";
 import { setCurrentChat } from "../redux/user/chatSlice";
 
-export default function PotentialChat({ user, onlineUsers }) {
+export default function PotentialChat({ user, onlineUsers, socket }) {
   const currentUser = useSelector((state) => state.user.currentUser);
   const { chats } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
@@ -36,6 +36,21 @@ export default function PotentialChat({ user, onlineUsers }) {
 			const data = await res.json();
 			dispatch(getChatsSuccess(chats.concat(data)));
       dispatch(setCurrentChat(data));
+
+      // Send the chat to the recipient if they are online
+      // Get the recipient Id 
+      const recipientId = data.members.find(
+        (memberId) => memberId !== currentUser._id
+      );
+      const recipientSocket = onlineUsers?.find(
+        (user) => user.userId === recipientId
+      );
+
+      socket.emit("sendCreateChat", {
+        chat: data,
+        recipientSocketId: recipientSocket?.socketId,
+      });
+
     } catch (err) {
 			//getChatsFail();
       console.error(err);

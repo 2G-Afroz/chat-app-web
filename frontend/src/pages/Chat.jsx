@@ -154,6 +154,19 @@ export default function Chat() {
     }
   }, [socket, messages]);
 
+  // Get the chat from the recipient
+  useEffect(() => {
+    if (socket === null) return;
+    
+    socket.on("getCreateChat", (chat) => {
+      dispatch(getChatsSuccess(chats.concat(chat)));
+    });
+
+    return () => {
+      socket.off("getCreateChat");
+    }
+  }, [socket, chats]);
+
   const handleChatClick = (chat) => {
     dispatch(setCurrentChat(chat));
   };
@@ -217,6 +230,7 @@ export default function Chat() {
               key={user._id}
               user={user}
               onlineUsers={onlineUsers}
+              socket={socket}
             />
           ))}
         </Grid2>

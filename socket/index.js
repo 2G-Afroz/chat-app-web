@@ -16,6 +16,10 @@ io.on("connection", (socket) => {
 		io.to(message.recipientSocketId).emit("getMessage", rest);
 	});
 
+	socket.on("sendCreateChat", (data) => {
+		io.to(data.recipientSocketId).emit("getCreateChat", data.chat);
+	})
+
 	socket.on("disconnect", () => {
 		onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
 		io.emit("onlineUsers", onlineUsers);

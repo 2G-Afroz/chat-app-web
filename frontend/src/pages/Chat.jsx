@@ -26,7 +26,6 @@ import {
 import PotentialChat from "../components/PotentialChat";
 import ChatBox from "../components/ChatBox";
 import { io } from "socket.io-client";
-import { current } from "@reduxjs/toolkit";
 
 export default function Chat() {
   const chats = useSelector((state) => state.chat.chats);

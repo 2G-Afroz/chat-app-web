@@ -7,6 +7,7 @@ import {
   getChatsSuccess,
   getChatsFail,
 } from "../redux/user/chatSlice";
+import { setCurrentChat } from "../redux/user/chatSlice";
 
 export default function PotentialChat({ user, onlineUsers }) {
   const currentUser = useSelector((state) => state.user.currentUser);
@@ -34,6 +35,7 @@ export default function PotentialChat({ user, onlineUsers }) {
 
 			const data = await res.json();
 			dispatch(getChatsSuccess(chats.concat(data)));
+      dispatch(setCurrentChat(data));
     } catch (err) {
 			//getChatsFail();
       console.error(err);

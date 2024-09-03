@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Avatar, Button, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -60,13 +60,16 @@ export default function PotentialChat({ user, onlineUsers, socket }) {
   return (
     <Button
       variant="outlined"
-      style={{ borderRadius: 16 }}
+      style={{padding: "4px 8px"}}
       onClick={handleCreateChat}
       {...(onlineUsers.some((onlineUser) => onlineUser.userId === user._id) && {
         sx: { backgroundColor: "green", color: "white" },
       })}
     >
-      {user.name}
+      <Avatar sx={{width: "16px", height: "16px"}}/>
+      <Typography variant="body2" sx={{mr: "4px", ml: "4px"}}>
+        {user.name}
+      </Typography>
     </Button>
   );
 }

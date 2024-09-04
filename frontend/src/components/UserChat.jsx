@@ -100,14 +100,14 @@ export default function UserChat({ chat, onlineUsers, notifications}) {
           {otherUser.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Last Message
+          {notifications[notifications.length-1]?.message}
         </Typography>
       </Grid2>
 
       {/* Date and unread message count */}
       <Grid2 container direction="column" alignItems="flex-end">
         <Typography variant="caption" color="text.secondary">
-          { formatTime(notifications?.[notifications.length - 1]?.date) }
+          { formatTime(notifications[notifications.length - 1]?.date) }
         </Typography>
         <Box
           sx={{

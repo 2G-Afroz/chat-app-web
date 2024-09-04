@@ -37,6 +37,18 @@ export default function Chat() {
   const [message, setMessage] = useState(""); // This is the message that user types in the chat input
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [ notifications, setNotifications ] = useState([]);
+
+  // Set the current chat notification to isRead: 'true'
+  useEffect(() => {
+    setNotifications(notifications.map((n) => {
+      if(n.chatId === currentChat?._id) {
+        console.log("Readed");
+        return { ...n, isRead: true };
+      }
+      return n;
+    }));
+  }, [currentChat]);
 
   // To get All Chats
   useEffect(() => {
@@ -167,6 +179,22 @@ export default function Chat() {
     }
   }, [socket, chats]);
 
+  // Get the notification from the recipient
+  useEffect(() => {
+    if (socket === null) return;
+
+    socket.on("getNotification", (notification) => {
+      if(currentChat._id === notification.chatId)
+        notification.isRead = true;
+      setNotifications(notifications.concat(notification));
+    });
+
+    return () => {
+      socket.off("getNotification");
+    }
+  }, [socket, notifications]);
+
+
   const handleChatClick = (chat) => {
     dispatch(setCurrentChat(chat));
   };
@@ -209,6 +237,13 @@ export default function Chat() {
             ...data.response,
             recipientSocketId: recipientSocket.socketId,
           });
+          socket.emit("sendNotification", {
+            recipientSocketId: recipientSocket.socketId,
+            chatId: currentChat._id,
+            isRead: false,
+            message: data.response.text,
+            date: new Date()
+          });
         }
 
       } else {
@@ -245,7 +280,11 @@ export default function Chat() {
                 justifyContent: "space-between",
                 cursor: "pointer",
               }}>
-              <UserChat chat={chat} onlineUsers={onlineUsers} />
+              <UserChat 
+                chat={chat} 
+                onlineUsers={onlineUsers}
+                notifications={notifications.filter((n) => n.chatId === chat._id)}
+              />
             </Box>
           ))}
         </List>

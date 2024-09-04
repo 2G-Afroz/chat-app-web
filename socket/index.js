@@ -18,7 +18,12 @@ io.on("connection", (socket) => {
 
 	socket.on("sendCreateChat", (data) => {
 		io.to(data.recipientSocketId).emit("getCreateChat", data.chat);
-	})
+	});
+
+	socket.on("sendNotification", (notification) => {
+		const { recipientSocketId, ...notifi } = notification;
+		io.to(recipientSocketId).emit("getNotification", notifi);
+	});
 
 	socket.on("disconnect", () => {
 		onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);

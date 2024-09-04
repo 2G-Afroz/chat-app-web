@@ -1,18 +1,49 @@
 import { Avatar, Box, Grid2, ListItem, Typography } from "@mui/material";
-import React from "react";
+import { useState, useEffect } from "react";
 import { blue, grey } from "@mui/material/colors";
 import { useSelector } from "react-redux";
 
-export default function UserChat({ chat, onlineUsers }) {
+export default function UserChat({ chat, onlineUsers, notifications}) {
   const currentUser = useSelector((state) => state.user.currentUser);
   const currentChat = useSelector((state) => state.chat.currentChat);
-  const [otherUser, setOtherUser] = React.useState("KING");
+  const [otherUser, setOtherUser] = useState("");
+
+  // Get unreaded notification
+  function getUnreadedNoti(nfs) {
+    return nfs.filter((n) => {
+      return !n.isRead;
+    });
+  }
+
+  // Get time of the last message
+  function formatTime(dateString) {
+    // Check if the dateString is valid
+    if (!dateString) return '';
+
+    // Parse the date string into a Date object
+    const date = new Date(dateString);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) return '';
+
+    // Get hours and minutes from the date object
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+
+    // Pad single digit hours and minutes with leading zero
+    hours = hours.toString().padStart(2, '0');
+    minutes = minutes.toString().padStart(2, '0');
+
+    // Return the formatted time
+    return `${hours}:${minutes}`;
+  }
+
 
   // Get the other user in the chat
   const otherUserId = chat.members.find(
     (memberId) => memberId !== currentUser._id
   );
-  React.useEffect(() => {
+  useEffect(() => {
     getUser(otherUserId).then((data) => {
       setOtherUser(data);
     });
@@ -69,14 +100,14 @@ export default function UserChat({ chat, onlineUsers }) {
           {otherUser.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Recent Message
+          Last Message
         </Typography>
       </Grid2>
 
       {/* Date and unread message count */}
       <Grid2 container direction="column" alignItems="flex-end">
         <Typography variant="caption" color="text.secondary">
-          12:00 PM
+          { formatTime(notifications?.[notifications.length - 1]?.date) }
         </Typography>
         <Box
           sx={{
@@ -86,10 +117,11 @@ export default function UserChat({ chat, onlineUsers }) {
             width: 20,
             height: 20,
             display: "flex",
+            visibility: getUnreadedNoti(notifications)?.length ? "visible" : "hidden",
             justifyContent: "center",
           }}>
           <Typography variant="body2" color="white">
-            2
+            { getUnreadedNoti(notifications)?.length }
           </Typography>
         </Box>
       </Grid2>

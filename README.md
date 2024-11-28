@@ -17,7 +17,7 @@ This is a chat application built using the MERN stack (MongoDB, Express.js, Reac
 	- `MONGODB_URI`: MongoDB connection string
 	- `JWT_SECRET_KEY`: Secret key for JWT authentication
 4. Start the server: `cd backend && npm start`
-5. Start the client: `cd frontend && npm start`
+5. Start the client: `cd frontend && npm run dev`
 5. Start the socket.io: `cd socket && npm start`
 
 ## Usage

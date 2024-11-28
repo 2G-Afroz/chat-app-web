@@ -44,7 +44,6 @@ export default function Chat() {
     setNotifications(
       notifications.map((n) => {
         if (n.chatId === currentChat?._id) {
-          console.log("Readed");
           return { ...n, isRead: true };
         }
         return n;
@@ -64,7 +63,7 @@ export default function Chat() {
           const data = await res.json();
           dispatch(getChatsSuccess(data.chats));
           // Get messages of all chatId and populate notifications
-          for (let chat of chats) {
+          for (let chat of data.chats) {
             const chatId = chat._id;
             const res = await fetch(`/api/messages/${chatId}`);
             if (res.ok) {
@@ -215,7 +214,7 @@ export default function Chat() {
 
     socket.on("getNotification", (notification) => {
       if (currentChat._id === notification.chatId) notification.isRead = true;
-      setNotifications(notifications.concat(notification));
+      setNotifications((prev) => prev.concat(notification));
     });
 
     return () => {

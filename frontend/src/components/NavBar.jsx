@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../redux/user/userSlice";
+import { resetChat } from "../redux/user/chatSlice";
+import { resetMessage } from "../redux/user/messageSlice";
 
 export default function NavBar() {
   const user = useSelector((state) => state.user.currentUser);
@@ -18,6 +20,8 @@ export default function NavBar() {
   const handleLogout = () => {
     localStorage.removeItem("persist:root");
     dispatch(logoutUser());
+    dispatch(resetChat());
+    dispatch(resetMessage());
     navigate("/login");
   };
 
@@ -30,17 +34,27 @@ export default function NavBar() {
               Chat App
             </Typography>
           </Link>
-          <Typography variant="body2" component="div" align="center" sx={{ flexGrow: 1, color: "yellow" }}>
-            { user ? `Logged in as ${user.name}` : "" }
+          <Typography
+            variant="body2"
+            component="div"
+            align="center"
+            sx={{ flexGrow: 1, color: "yellow" }}>
+            {user ? `Logged in as ${user.name}` : ""}
           </Typography>
-          { user ? (
-            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+          {user ? (
+            <Button color="inherit" onClick={handleLogout}>
+              Logout
+            </Button>
           ) : (
             <>
-              <Link to="/login" style={{ textDecoration: "none", color: "white" }}>
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "white" }}>
                 <Button color="inherit">Login</Button>
               </Link>
-              <Link to="/register" style={{ textDecoration: "none", color: "white" }}>
+              <Link
+                to="/register"
+                style={{ textDecoration: "none", color: "white" }}>
                 <Button color="inherit">Register</Button>
               </Link>
             </>

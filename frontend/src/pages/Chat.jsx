@@ -63,6 +63,27 @@ export default function Chat() {
         if (res.ok) {
           const data = await res.json();
           dispatch(getChatsSuccess(data.chats));
+          // Get messages of all chatId and populate notifications
+          for (let chat of chats) {
+            const chatId = chat._id;
+            const res = await fetch(`/api/messages/${chatId}`);
+            if (res.ok) {
+              const data = await res.json();
+              const unreadedMsgs = data.messages.filter(
+                (msg) => msg.isRead === false && msg.senderId != currentUser._id
+              );
+              setNotifications((prev) =>
+                prev.concat(
+                  unreadedMsgs.map((umsg) => ({
+                    chatId: umsg.chatId,
+                    isRead: umsg.isRead,
+                    message: umsg.text,
+                    date: umsg.createdAt,
+                  }))
+                )
+              );
+            }
+          }
         } else {
           dispatch(getChatsFail());
         }

@@ -37,17 +37,19 @@ export default function Chat() {
   const [message, setMessage] = useState(""); // This is the message that user types in the chat input
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [ notifications, setNotifications ] = useState([]);
+  const [notifications, setNotifications] = useState([]);
 
   // Set the current chat notification to isRead: 'true'
   useEffect(() => {
-    setNotifications(notifications.map((n) => {
-      if(n.chatId === currentChat?._id) {
-        console.log("Readed");
-        return { ...n, isRead: true };
-      }
-      return n;
-    }));
+    setNotifications(
+      notifications.map((n) => {
+        if (n.chatId === currentChat?._id) {
+          console.log("Readed");
+          return { ...n, isRead: true };
+        }
+        return n;
+      })
+    );
   }, [currentChat]);
 
   // To get All Chats
@@ -114,6 +116,13 @@ export default function Chat() {
           if (res.ok) {
             const data = await res.json();
             dispatch(getMessagesSuccess(data.messages));
+            // Making all messages of opened chat as "isRead: true"
+            await fetch(
+              `api/messages?chatId=${currentChat._id}&userId=${currentUser._id}`,
+              {
+                method: "PUT",
+              }
+            );
           } else {
             dispatch(getMessagesFail());
           }
@@ -156,27 +165,27 @@ export default function Chat() {
     if (socket === null) return;
 
     socket.on("getMessage", (message) => {
-      if(message.chatId === currentChat?._id) {
+      if (message.chatId === currentChat?._id) {
         dispatch(getMessagesSuccess(messages.concat(message)));
       }
     });
 
     return () => {
       socket.off("getMessage");
-    }
+    };
   }, [socket, messages]);
 
   // Get the chat from the recipient
   useEffect(() => {
     if (socket === null) return;
-    
+
     socket.on("getCreateChat", (chat) => {
       dispatch(getChatsSuccess(chats.concat(chat)));
     });
 
     return () => {
       socket.off("getCreateChat");
-    }
+    };
   }, [socket, chats]);
 
   // Get the notification from the recipient
@@ -184,16 +193,14 @@ export default function Chat() {
     if (socket === null) return;
 
     socket.on("getNotification", (notification) => {
-      if(currentChat._id === notification.chatId)
-        notification.isRead = true;
+      if (currentChat._id === notification.chatId) notification.isRead = true;
       setNotifications(notifications.concat(notification));
     });
 
     return () => {
       socket.off("getNotification");
-    }
+    };
   }, [socket, notifications]);
-
 
   const handleChatClick = (chat) => {
     dispatch(setCurrentChat(chat));
@@ -223,7 +230,7 @@ export default function Chat() {
         dispatch(getMessagesSuccess(messages.concat(data.response)));
         setMessage("");
 
-        // Get the recipient Id 
+        // Get the recipient Id
         const recipientId = currentChat.members.find(
           (memberId) => memberId !== currentUser._id
         );
@@ -242,10 +249,9 @@ export default function Chat() {
             chatId: currentChat._id,
             isRead: false,
             message: data.response.text,
-            date: new Date()
+            date: new Date(),
           });
         }
-
       } else {
         console.log("Failed to send message");
       }
@@ -280,10 +286,12 @@ export default function Chat() {
                 justifyContent: "space-between",
                 cursor: "pointer",
               }}>
-              <UserChat 
-                chat={chat} 
+              <UserChat
+                chat={chat}
                 onlineUsers={onlineUsers}
-                notifications={notifications.filter((n) => n.chatId === chat._id)}
+                notifications={notifications.filter(
+                  (n) => n.chatId === chat._id
+                )}
               />
             </Box>
           ))}

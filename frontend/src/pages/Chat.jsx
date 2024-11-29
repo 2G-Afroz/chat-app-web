@@ -157,7 +157,7 @@ export default function Chat() {
 
   // Connect to the socket
   useEffect(() => {
-    const newSocket = io("http://localhost:4000");
+    const newSocket = io("http://localhost:3000");
     setSocket(newSocket);
 
     return () => {

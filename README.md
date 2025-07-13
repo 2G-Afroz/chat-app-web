@@ -14,8 +14,10 @@ This is a chat application built using the MERN stack (MongoDB, Express.js, Reac
 1. Clone the repository: `https://github.com/2G-Afroz/chat-app-web`
 2. Install dependencies: `(cd backend && npm install) && (cd frontend && npm install)`
 3. Set up environment variables: Create a `.env` file in the backend directory and add the following variables:
-	- `MONGODB_URI`: MongoDB connection string
-	- `JWT_SECRET_KEY`: Secret key for JWT authentication
+
+   - `MONGODB_URI`: MongoDB connection string
+   - `JWT_SECRET_KEY`: Secret key for JWT authentication
+
 4. Start the server: `cd backend && npm start`
 5. Start the client: `cd frontend && npm run dev`
 
